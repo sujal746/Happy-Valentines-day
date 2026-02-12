@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Valentine's Day, Doll</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #be123c;
+            --secondary: #fb7185;
+            --accent: #fff1f2;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--accent);
+            color: #1f2937;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .font-script { font-family: 'Great Vibes', cursive; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+
+        /* Floating Hearts Animation */
+        .heart {
+            position: fixed;
+            color: rgba(190, 18, 60, 0.4);
+            font-size: 20px;
+            pointer-events: none;
+            z-index: 0;
+            user-select: none;
+            animation: float 10s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #be123c 0%, #fb7185 100%);
+        }
+
+        /* Core Page Logic */
+        .page-content {
+            display: none;
+            min-height: calc(100vh - 80px);
+        }
+
+        .page-active {
+            display: block !important;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .polaroid {
+            background: white;
+            padding: 0.75rem;
+            padding-bottom: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block;
+            width: 100%;
+        }
+
+        .polaroid:hover {
+            transform: scale(1.05) rotate(0deg) !important;
+            z-index: 20;
+            box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        nav a.active {
+            color: #be123c;
+            border-bottom: 2px solid #be123c;
+        }
+
+        /* Alchemy Styles */
+        .ingredient-btn { transition: all 0.3s ease; border: 2px solid transparent; }
+        .ingredient-btn.selected { background-color: #be123c; color: white; transform: scale(1.05); border-color: #fda4af; }
+        .alchemy-liquid { transition: height 0.5s ease; }
+        @keyframes slosh { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+        .beaker-animate { animation: slosh 2s ease-in-out infinite; }
+
+        /* Soul Map Stars */
+        .star-node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 8px rgba(251, 113, 133, 0.8));
+            z-index: 10;
+        }
+        .star-node:hover { transform: scale(1.4); filter: drop-shadow(0 0 20px white); }
+        
+        /* Proposal Pulse */
+        .pulse-heart { animation: heartbeat 1.5s ease-in-out infinite; }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="hearts-container"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass h-20 flex items-center justify-center px-6 shadow-sm">
+        <div class="flex space-x-3 md:space-x-6 text-[10px] md:text-sm font-semibold uppercase tracking-widest text-gray-500 overflow-x-auto whitespace-nowrap py-2 no-scrollbar">
+            <a href="#" onclick="navigateTo('home')" id="nav-home" class="hover:text-rose-600 transition active">Home</a>
+            <a href="#" onclick="navigateTo('journey')" id="nav-journey" class="hover:text-rose-600 transition">Journey</a>
+            <a href="#" onclick="navigateTo('reasons')" id="nav-reasons" class="hover:text-rose-600 transition">Why You</a>
+            <a href="#" onclick="navigateTo('alchemy')" id="nav-alchemy" class="hover:text-rose-600 transition">Alchemy</a>
+            <a href="#" onclick="navigateTo('soul')" id="nav-soul" class="hover:text-rose-600 transition">Soul Bound</a>
+            <a href="#" onclick="navigateTo('letter')" id="nav-letter" class="hover:text-rose-600 transition">Letter</a>
+            <a href="#" onclick="navigateTo('proposal')" id="nav-proposal" class="hover:text-rose-600 transition text-rose-600 font-bold">Final Question</a>
+        </div>
+    </nav>
+
+    <!-- Page: Home -->
+    <section id="page-home" class="page-content page-active mt-20">
+        <header class="relative h-[90vh] flex items-center justify-center text-center px-4 hero-gradient overflow-hidden rounded-b-[4rem] shadow-2xl">
+            <div class="absolute inset-0 opacity-20">
+                <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0 100 C 20 0 50 0 100 100 Z" fill="white"></path></svg>
+            </div>
+            <div class="relative z-10 text-white">
+                <h1 class="font-script text-5xl md:text-7xl mb-4">Happy Valentine's Day</h1>
+                <p class="font-serif text-2xl md:text-4xl italic mb-8">To My Everything, Shraddha</p>
+                <p class="font-serif text-lg md:text-xl tracking-widest opacity-80 uppercase mb-12">My One and Only Doll</p>
+                <button onclick="navigateTo('journey')" class="bg-white text-rose-600 px-10 py-4 rounded-full font-bold shadow-lg hover:bg-rose-50 transition transform hover:scale-105">
+                    Step Into Our World
+                </button>
+            </div>
+        </header>
+        <div class="max-w-4xl mx-auto px-6 py-20 text-center">
+            <h2 class="font-serif text-3xl mb-8 text-rose-800 italic">"You are the piece of my soul I didn't know was missing."</h2>
+            <div class="h-px w-24 bg-rose-300 mx-auto"></div>
+            <p class="mt-8 text-gray-500 font-serif italic text-lg tracking-wide">Handcrafted with love by your Kulfi.</p>
+        </div>
+    </section>
+
+    <!-- Page: Journey -->
+    <section id="page-journey" class="page-content mt-20 py-16">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-serif text-5xl mb-4 text-rose-800">Our Beautiful Journey</h2>
+                <p class="text-gray-600 italic">Every snapshot is a story Kulfi wants to tell forever.</p>
+            </div>
+            
+            <!-- Gallery Grid with 1:1 Aspect Ratio -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Row 1 (Main.png removed from here) -->
+                <div class="polaroid transform rotate-3">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/O4_Valentines.png" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="polaroid transform -rotate-1">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/Valentine2024_6.png" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="polaroid transform rotate-2">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/Valentine2024_6_1.png" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="polaroid transform -rotate-1">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/IMG_20250207_131606.jpg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="polaroid transform rotate-2">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/IMG_20250207_125512.jpg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="polaroid transform -rotate-3">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/IMG_20250113_110952.jpg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="polaroid transform rotate-1">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/IMG_20241101_140118.jpg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="polaroid transform rotate-2">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/IMG_20241001_123408_1.jpg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="polaroid transform -rotate-2">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/IMG_20240918_102740.jpg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="polaroid transform rotate-3">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/IMG_20240906_130632.jpg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="polaroid transform -rotate-1">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/IMG_20240903_131153.jpg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="polaroid transform -rotate-3">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/IMG_20240820_114244.jpg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="polaroid transform rotate-2">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/IMG_20240812_122447.jpg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="polaroid transform -rotate-1">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/IMG_20240624_003626_035.jpg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="polaroid transform rotate-3">
+                    <div class="aspect-square overflow-hidden mb-2">
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/IMG-20250107-WA0009_1751127218265.jpg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page: Reasons Why -->
+    <section id="page-reasons" class="page-content mt-20 py-16">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <div class="absolute -inset-4 hero-gradient rounded-full opacity-10 blur-3xl"></div>
+                    <div class="relative glass p-4 rounded-3xl shadow-2xl overflow-hidden">
+                        <!-- Added Main.png here -->
+                        <img src="https://raw.githubusercontent.com/sujal746/gif/main/Main.png" class="rounded-2xl w-full">
+                    </div>
+                </div>
+                <div>
+                    <h2 class="font-serif text-5xl mb-8 text-rose-800">Why I Adore You</h2>
+                    <div class="space-y-8 text-left">
+                        <div class="flex items-start"><div class="bg-rose-100 p-3 rounded-2xl mr-4 text-rose-600 text-2xl">❤</div><div><h4 class="font-bold text-rose-900 text-xl">Your Radiant Smile</h4><p class="text-gray-600">The only light Kulfi needs on his darkest days.</p></div></div>
+                        <div class="flex items-start"><div class="bg-rose-100 p-3 rounded-2xl mr-4 text-rose-600 text-2xl">❤</div><div><h4 class="font-bold text-rose-900 text-xl">Your Kind Soul</h4><p class="text-gray-600">How you care for the world makes me better.</p></div></div>
+                        <div class="flex items-start"><div class="bg-rose-100 p-3 rounded-2xl mr-4 text-rose-600 text-2xl">❤</div><div><h4 class="font-bold text-rose-700 italic">"Silent understanding is our superpower."</h4></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page: Alchemy -->
+    <section id="page-alchemy" class="page-content mt-20 py-16">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <h2 class="font-serif text-5xl mb-4 text-rose-800">The Alchemy of Us</h2>
+            <p class="text-gray-600 mb-12 italic">Mix 3 ingredients for a magical reaction, Doll.</p>
+            <div class="grid md:grid-cols-2 gap-12 items-start">
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button onclick="toggleIngredient('Hug')" class="ingredient-btn bg-white px-4 py-2 rounded-full shadow-sm text-sm">🫂 Hug</button>
+                    <button onclick="toggleIngredient('Kiss')" class="ingredient-btn bg-white px-4 py-2 rounded-full shadow-sm text-sm">💋 Kiss</button>
+                    <button onclick="toggleIngredient('Love')" class="ingredient-btn bg-white px-4 py-2 rounded-full shadow-sm text-sm">❤️ Love</button>
+                    <button onclick="toggleIngredient('Care')" class="ingredient-btn bg-white px-4 py-2 rounded-full shadow-sm text-sm">🛡️ Care</button>
+                    <button onclick="toggleIngredient('Snaps')" class="ingredient-btn bg-white px-4 py-2 rounded-full shadow-sm text-sm">📸 Your snaps</button>
+                    <button onclick="toggleIngredient('Jealousy')" class="ingredient-btn bg-white px-4 py-2 rounded-full shadow-sm text-sm">😤 Jealousy</button>
+                    <button onclick="toggleIngredient('Cuteness')" class="ingredient-btn bg-white px-4 py-2 rounded-full shadow-sm text-sm">🥰 Cuteness</button>
+                    <button onclick="toggleIngredient('Touches')" class="ingredient-btn bg-white px-4 py-2 rounded-full shadow-sm text-sm">🤝 Touches</button>
+                    <button onclick="toggleIngredient('Games')" class="ingredient-btn bg-white px-4 py-2 rounded-full shadow-sm text-sm">🎮 Playing games</button>
+                    <button onclick="toggleIngredient('Food')" class="ingredient-btn bg-white px-4 py-2 rounded-full shadow-sm text-sm">🍱 Eating together</button>
+                </div>
+                <div class="relative flex justify-center"><div class="w-56 h-72 border-4 border-white/80 rounded-b-[2.5rem] overflow-hidden glass"><div id="liquid" class="absolute bottom-0 left-0 right-0 h-0 bg-rose-400 opacity-60 transition-all"></div></div></div>
+            </div>
+            <button onclick="brewMagic()" id="brew-btn" class="mt-8 bg-rose-600 text-white px-10 py-4 rounded-full font-bold opacity-50 cursor-not-allowed" disabled>Create Magic</button>
+            <div id="alchemy-result" class="mt-12 hidden glass p-8 rounded-3xl"><h4 class="font-script text-4xl text-rose-700" id="result-title"></h4><p class="italic mt-2" id="result-desc"></p></div>
+        </div>
+    </section>
+
+    <!-- Page: Soul Bound -->
+    <section id="page-soul" class="page-content mt-20 py-16 bg-[#0f0712]">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <h2 class="font-serif text-5xl mb-4 text-rose-200">The Constellation of Us</h2>
+            <p class="text-rose-400 italic mb-12">Doll, the stars reflect our connection. Click to reveal their whispers.</p>
+            
+            <div class="relative h-[500px] w-full border border-rose-900/30 rounded-[3rem] bg-black/40 overflow-hidden shadow-inner flex items-center justify-center">
+                <!-- Stars mapping our love -->
+                <div class="absolute top-1/4 left-[15%] star-node" onclick="revealSoul('The Anchor')">✨<span class="block text-[10px] text-white">Trust</span></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 star-node" onclick="revealSoul('The Flame')">✨<span class="block text-[10px] text-white">Passion</span></div>
+                <div class="absolute bottom-1/4 right-[15%] star-node" onclick="revealSoul('The Mirror')">✨<span class="block text-[10px] text-white">Growth</span></div>
+                <div class="absolute top-1/3 right-[20%] star-node" onclick="revealSoul('The Sanctuary')">✨<span class="block text-[10px] text-white">Safety</span></div>
+                <div class="absolute bottom-1/3 left-[20%] star-node" onclick="revealSoul('The Echo')">✨<span class="block text-[10px] text-white">Laughter</span></div>
+                
+                <div class="absolute top-[10%] left-1/2 star-node" onclick="revealSoul('The North Star')">✨<span class="block text-[10px] text-white">Direction</span></div>
+                <div class="absolute bottom-[10%] right-1/3 star-node" onclick="revealSoul('The Melody')">✨<span class="block text-[10px] text-white">Rhythm</span></div>
+                <div class="absolute top-[60%] right-[10%] star-node" onclick="revealSoul('The Secret')">✨<span class="block text-[10px] text-white">Silence</span></div>
+                
+                <div id="soul-reveal" class="z-30 p-8 glass bg-black/80 border-rose-500 hidden max-w-sm rounded-2xl relative shadow-[0_0_30px_rgba(190,18,60,0.5)]">
+                    <button onclick="closeSoul()" class="absolute top-2 right-4 text-rose-300 hover:text-white text-xl">✕</button>
+                    <h4 id="soul-title" class="font-serif text-2xl text-rose-300 font-bold mb-2"></h4>
+                    <p id="soul-text" class="text-rose-100 italic text-lg"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page: Letter -->
+    <section id="page-letter" class="page-content mt-20 py-16">
+        <div class="max-w-3xl mx-auto px-6">
+            <div class="text-center mb-12"><h2 class="font-serif text-5xl text-rose-800">A Letter for My Doll</h2></div>
+            <div class="glass p-12 rounded-[2rem] shadow-2xl border-2 border-white/50 relative">
+                <div class="font-serif leading-relaxed text-gray-700 space-y-6 text-lg text-center">
+                    <p>My Dearest Shraddha,</p>
+                    <p>You aren't just my partner; you are my home. Every laugh we share is a treasure Kulfi guards with his life.</p>
+                    <p class="font-script text-4xl pt-4 text-rose-700">I love you more than words can say.</p>
+                    <p class="font-bold text-rose-900 pt-4">- Yours Always, Kulfi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page: Final Question -->
+    <section id="page-proposal" class="page-content mt-20 py-16">
+        <div class="max-w-3xl mx-auto px-6 text-center">
+            <!-- Step 1: Pre-Question Meter -->
+            <div id="proposal-step-1" class="glass p-12 rounded-[4rem] border-4 border-rose-300 shadow-2xl relative overflow-hidden">
+                <h3 class="font-script text-5xl text-rose-800 mb-6">Hold on, Doll!</h3>
+                <p class="font-serif text-lg text-gray-600 mb-8">Before Kulfi asks the Final Question, we need to charge the Love Meter to 100%!</p>
+                <div class="w-full bg-gray-200 h-8 rounded-full mb-8 overflow-hidden border-2 border-rose-200">
+                    <div id="love-meter-bar" class="h-full bg-gradient-to-r from-rose-400 to-rose-600 w-0 transition-all duration-300"></div>
+                </div>
+                <button onclick="chargeMeter()" class="bg-rose-500 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-rose-600 active:scale-95 transition-all">
+                    TAP TO SEND LOVE ❤️
+                </button>
+                <p class="mt-4 text-xs text-rose-400 animate-pulse" id="tap-count-text">Taps remaining: 10</p>
+            </div>
+
+            <!-- Step 2: The Actual Proposal -->
+            <div id="proposal-step-2" class="hidden glass p-12 rounded-[4rem] border-4 border-rose-400 shadow-2xl relative overflow-hidden fade-in">
+                <div class="absolute -top-10 -right-10 text-9xl opacity-10 rotate-12">💖</div>
+                <div class="absolute -bottom-10 -left-10 text-9xl opacity-10 -rotate-12">💖</div>
+                <div class="relative z-10">
+                    <h3 class="font-script text-6xl text-rose-800 mb-6">Shraddha...</h3>
+                    <div class="text-6xl mb-8 pulse-heart inline-block">💍</div>
+                    <h2 class="font-serif text-4xl md:text-5xl font-bold text-rose-900 leading-tight mb-8">
+                        Will you be my Valentine today, tomorrow, and forever?
+                    </h2>
+                    <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
+                        <button id="yes-btn" onclick="acceptProposal()" class="bg-rose-600 text-white px-12 py-5 rounded-full text-2xl font-bold shadow-xl hover:bg-rose-700 transition transform hover:scale-110">
+                            YES! A Thousand Times Yes!
+                        </button>
+                        <button id="no-btn" onmouseover="dodgeButton(this)" onclick="dodgeButton(this)" class="bg-gray-200 text-gray-500 px-8 py-3 rounded-full text-sm font-bold opacity-60 transition-all min-w-[120px]">
+                            No
+                        </button>
+                    </div>
+                </div>
+                <div id="final-message" class="hidden mt-12 fade-in">
+                    <h4 class="font-script text-6xl text-rose-700 mb-4 animate-bounce">My heart is yours, Doll!</h4>
+                    <p class="font-serif text-xl italic text-gray-700">You've made Kulfi the happiest person alive! ❤️</p>
+                    <p class="mt-4 text-rose-400 font-bold tracking-widest uppercase text-xs">Contract signed in Love ♾️</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-rose-900 text-rose-100 py-12 px-6 text-center">
+        <p class="font-script text-4xl mb-2">Kulfi ❤ Doll</p>
+        <p class="text-xs opacity-40 uppercase tracking-widest">Forever Bound • 2026</p>
+    </footer>
+
+    <script>
+        function navigateTo(pageId) {
+            const sections = document.querySelectorAll('.page-content');
+            sections.forEach(section => {
+                section.classList.remove('page-active');
+                section.style.display = 'none';
+            });
+            const target = document.getElementById('page-' + pageId);
+            if (target) {
+                target.style.display = 'block';
+                target.classList.add('page-active');
+            }
+            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+            const navLink = document.getElementById('nav-' + pageId);
+            if (navLink) navLink.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Alchemy Logic
+        let selectedIngredients = [];
+        function toggleIngredient(name) {
+            const btns = document.querySelectorAll('.ingredient-btn');
+            const targetBtn = Array.from(btns).find(b => b.innerText.includes(name));
+            if (selectedIngredients.includes(name)) {
+                selectedIngredients = selectedIngredients.filter(i => i !== name);
+                targetBtn.classList.remove('selected');
+            } else if (selectedIngredients.length < 3) {
+                selectedIngredients.push(name);
+                targetBtn.classList.add('selected');
+            }
+            document.getElementById('liquid').style.height = `${(selectedIngredients.length / 3) * 100}%`;
+            const brewBtn = document.getElementById('brew-btn');
+            brewBtn.disabled = selectedIngredients.length !== 3;
+            brewBtn.classList.toggle('opacity-50', selectedIngredients.length !== 3);
+            brewBtn.classList.toggle('cursor-not-allowed', selectedIngredients.length !== 3);
+        }
+
+        function brewMagic() {
+            const result = document.getElementById('alchemy-result');
+            result.classList.remove('hidden');
+            document.getElementById('result-title').innerText = "Pure Magic Created!";
+            document.getElementById('result-desc').innerText = "These ingredients blended into the most beautiful connection Kulfi has ever seen. You are his world, Doll.";
+            for(let i=0; i<30; i++) setTimeout(createHeart, i * 40);
+        }
+
+        // Soul Map Logic
+        const soulMessages = {
+            'The Anchor': "Kulfi feels completely safe knowing you're in his life. You are his steady ground.",
+            'The Flame': "Your energy and passion spark something in him that nobody else can reach.",
+            'The Mirror': "We grow together, reflecting the best versions of ourselves every single day.",
+            'The Sanctuary': "When the world is loud, your presence is the only silence Doll needs.",
+            'The Echo': "Every laugh we share echoes in Kulfi's heart forever.",
+            'The North Star': "No matter how lost Kulfi feels, thinking of you always shows him the way home.",
+            'The Melody': "The rhythm of our hearts matches perfectly. You are the song Kulfi will never stop singing.",
+            'The Secret': "A quiet understanding that belongs only to us. It's the magic in our silences, Doll."
+        };
+
+        function revealSoul(title) {
+            const box = document.getElementById('soul-reveal');
+            box.classList.add('hidden');
+            box.classList.remove('fade-in');
+            setTimeout(() => {
+                document.getElementById('soul-title').innerText = title;
+                document.getElementById('soul-text').innerText = soulMessages[title];
+                box.classList.remove('hidden');
+                box.classList.add('fade-in');
+            }, 50);
+            for(let i=0; i<8; i++) setTimeout(createHeart, i * 100);
+        }
+
+        function closeSoul() {
+            document.getElementById('soul-reveal').classList.add('hidden');
+        }
+
+        let meterTaps = 10;
+        function chargeMeter() {
+            if (meterTaps > 0) {
+                meterTaps--;
+                const bar = document.getElementById('love-meter-bar');
+                const text = document.getElementById('tap-count-text');
+                bar.style.width = `${(10 - meterTaps) * 10}%`;
+                text.innerText = `Taps remaining: ${meterTaps}`;
+                createHeart();
+                if (meterTaps === 0) {
+                    setTimeout(() => {
+                        document.getElementById('proposal-step-1').classList.add('hidden');
+                        document.getElementById('proposal-step-2').classList.remove('hidden');
+                        confetti({ particleCount: 50, spread: 30, origin: { y: 0.8 } });
+                    }, 500);
+                }
+            }
+        }
+
+        function acceptProposal() {
+            confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, colors: ['#be123c', '#fb7185', '#ffffff'] });
+            document.getElementById('final-message').classList.remove('hidden');
+            document.getElementById('yes-btn').style.display = 'none';
+            document.getElementById('no-btn').style.display = 'none';
+            for(let i=0; i<60; i++) setTimeout(createHeart, i * 30);
+        }
+
+        const funnyNoPhrases = ["Wait, what?", "Wrong button!", "Are you sure?", "Too late!", "Catch me!", "System says NO."];
+        const colors = ["#f87171", "#fb923c", "#fbbf24", "#34d399", "#60a5fa", "#818cf8", "#a78bfa", "#f472b6"];
+
+        function dodgeButton(btn) {
+            const padding = 100;
+            const x = Math.max(padding, Math.min(window.innerWidth - padding * 2, Math.random() * window.innerWidth));
+            const y = Math.max(padding, Math.min(window.innerHeight - padding * 2, Math.random() * window.innerHeight));
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+            btn.style.zIndex = '9999';
+            btn.innerText = funnyNoPhrases[Math.floor(Math.random() * funnyNoPhrases.length)];
+            btn.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            btn.style.color = "white";
+            btn.style.transform = `scale(${0.7 + Math.random() * 0.6})`;
+            btn.setAttribute('onclick', 'dodgeButton(this); return false;');
+        }
+
+        function createHeart() {
+            const container = document.getElementById('hearts-container');
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = ['❤', '💖', '💕', '💗', '💓'][Math.floor(Math.random() * 5)];
+            const startX = Math.random() * window.innerWidth;
+            const duration = 5 + Math.random() * 10;
+            heart.style.left = startX + 'px';
+            heart.style.animationDuration = duration + 's';
+            heart.style.fontSize = (10 + Math.random() * 20) + 'px';
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), duration * 1000);
+        }
+        setInterval(createHeart, 800);
+    </script>
+</body>
+</html>
